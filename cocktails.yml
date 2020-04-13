@@ -205,14 +205,21 @@ components:
           items:
             $ref: '#/components/schemas/IngredientTag'
     IngredientType:
-      type: string
-      enum:
-        - HARD_LIQUOR
-        - LIQUOR
-        - SOFT_DRINK
-        - JUICE
-        - FRUIT
-        - OTHER
+      type: object
+      required:
+        - name
+        - locale
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Hard Liquor
+        locale:
+          type: string
+          example: de-DE
     IngredientName:
       type: object
       required:
