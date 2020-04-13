@@ -208,69 +208,68 @@ components:
     IngredientType:
       type: object
       required:
-        - name
-        - locale
+        - typeNames
       properties:
         id:
           type: integer
           format: int64
           example: 10
-        name:
-          type: string
-          example: Hard Liquor
-        locale:
-          type: string
-          example: de-DE
+        typeNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedString'
     IngredientName:
       type: object
       required:
-        - name
-        - locale
+        - names
       properties:
         id:
           type: integer
           format: int64
           example: 20
-        name:
-          type: string
-          example: Vodka
-        locale:
-          type: string
-          example: en-GB
+        names:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedString'
     IngredientDescription:
       type: object
       required:
-        - description
-        - locale
+        - descriptions
       properties:
         id:
           type: integer
           format: int64
           example: 20
-        description:
-          type: string
-          example: Vodka is a neutral spirit distilled from grain or potatoes
-        locale:
-          type: string
-          example: en-GB
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedString'
     IngredientTag:
       type: object
       required:
-        - tag
+        - tagNames
       properties:
         id:
           type: integer
           format: int64
           example: 20
-        tag:
-          type: string
-          example: Delicious spirits
+        tagNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedString'
     SearchResult:
       type: object
       properties:
         name:
-          type: string
-          example: Williams Pear
+          $ref: '#/components/schemas/LocalizedString'
         description:
+          $ref: '#/components/schemas/LocalizedString'
+    LocalizedString:
+      type: object
+      properties:
+        locale:
           type: string
-          example: A spirit distilled from the Williams Pear
+          example: de-DE
+        string:
+          type: string
+          example: Wodka
