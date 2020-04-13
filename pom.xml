@@ -36,6 +36,24 @@
                             <generateSupportingFiles>false</generateSupportingFiles>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>generate-angular-client</id>
+                        <configuration>
+                            <inputSpec>${project.basedir}/cocktails.yml</inputSpec>
+                            <language>typescript-angular</language>
+                            <output>${project.basedir}/../src/generated</output>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <configHelp>false</configHelp>
+                            <configOptions>
+                                <ngVersion>9.1.1</ngVersion>
+                            </configOptions>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
