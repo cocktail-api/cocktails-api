@@ -17,6 +17,7 @@ paths:
   /ingredients:
     get:
       summary: Return a list of ingredients
+      operationId: getAllIngredients
       tags:
         - 'ingredients'
       responses:
@@ -28,6 +29,7 @@ paths:
                 $ref: '#/components/schemas/Ingredient'
     post:
       summary: Create a new ingredient
+      operationId: createIngredient
       tags:
         - 'ingredients'
       requestBody:
@@ -52,6 +54,7 @@ paths:
                 example: Type cannot be null
     patch:
       summary: Update existing ingredient
+      operationId: updateIngredient
       tags:
         - 'ingredients'
       requestBody:
@@ -79,6 +82,7 @@ paths:
   /ingredients/{id}:
     get:
       summary: Get a single ingredient
+      operationId: getIngredientById
       tags:
         - 'ingredients'
       parameters:
@@ -101,6 +105,7 @@ paths:
           description: ID not found
     delete:
       summary: Delete a single ingredient
+      operationId: deleteIngredient
       tags:
         - 'ingredients'
       parameters:
@@ -120,6 +125,7 @@ paths:
   /ingredients/bulk:
     post:
       summary: Create multiple new ingredients
+      operationId: createBulkIngredients
       tags:
         - 'ingredients'
       requestBody:
@@ -149,6 +155,7 @@ paths:
   /search:
     get:
       summary: Search for cocktails and ingredients
+      operationId: unifiedSearch
       tags:
         - 'ingredients'
         - 'cocktails'
