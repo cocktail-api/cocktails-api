@@ -165,6 +165,7 @@ paths:
           schema:
             type: string
           description: Part of the name or description of the ingredient or cocktail, in any language
+          required: true
       responses:
         '200':
           description: All search results
