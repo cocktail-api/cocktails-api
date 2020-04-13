@@ -1,0 +1,96 @@
+openapi: 3.0.0
+info:
+  title: Cocktail and ingredient API
+  version: 0.0.1
+
+paths:
+  /ingredients:
+    get:
+      summary: Return a list of ingredients
+      responses:
+        '200':
+          description: JSON Array of ingredients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+
+components:
+  schemas:
+    Ingredient:
+      type: object
+      required:
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        type:
+          $ref: '#/components/schemas/IngredientType'
+        names:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientName'
+        descriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientDescription'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientTag'
+    IngredientType:
+      type: string
+      enum:
+        - HARD_LIQUOR
+        - LIQUOR
+        - SOFT_DRINK
+        - JUICE
+        - FRUIT
+        - OTHER
+    IngredientName:
+      type: object
+      required:
+        - name
+        - locale
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 20
+        name:
+          type: string
+          example: Vodka
+        locale:
+          type: string
+          example: en-GB
+    IngredientDescription:
+      type: object
+      required:
+        - name
+        - locale
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 20
+        name:
+          type: string
+          example: Vodka is a neutral spirit distilled from grain or potatoes
+        locale:
+          type: string
+          example: en-GB
+    IngredientTag:
+      type: object
+      required:
+        - tag
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 20
+        tag:
+          type: string
+          example: Delicious spirits
+
