@@ -181,6 +181,8 @@ components:
       type: object
       required:
         - type
+        - names
+        - descriptions
       properties:
         id:
           type: integer
@@ -192,10 +194,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IngredientName'
+          minItems: 1
         descriptions:
           type: array
           items:
             $ref: '#/components/schemas/IngredientDescription'
+          minItems: 1
         tags:
           type: array
           items:
