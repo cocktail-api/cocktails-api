@@ -3,10 +3,22 @@ info:
   title: Cocktail and ingredient API
   version: 0.0.1
 
+servers:
+  - url: http://localhost:8080/
+    description: Local development server
+
+tags:
+  - name: 'ingredients'
+    description: 'Ingredient Operations'
+  - name: 'cocktails'
+    description: 'Cocktail Operations'
+
 paths:
   /ingredients:
     get:
       summary: Return a list of ingredients
+      tags:
+        - 'ingredients'
       responses:
         '200':
           description: JSON Array of ingredients
@@ -14,6 +26,147 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ingredient'
+    post:
+      summary: Create a new ingredient
+      tags:
+        - 'ingredients'
+      requestBody:
+        description: New ingredient
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ingredient'
+      responses:
+        '200':
+          description: Creation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        '400':
+          description: Input object malformed
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Type cannot be null
+    patch:
+      summary: Update existing ingredient
+      tags:
+        - 'ingredients'
+      requestBody:
+        description: Updated ingredient
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ingredient'
+      responses:
+        '200':
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        '400':
+          description: Input object malformed
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Type cannot be null
+        '404':
+          description: Ingredient with ID not found
+  /ingredients/{id}:
+    get:
+      summary: Get a single ingredient
+      tags:
+        - 'ingredients'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          required: true
+          description: ID of the ingredient to get
+      responses:
+        '200':
+          description: JSON Ingredient
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        '404':
+          description: ID not found
+    delete:
+      summary: Delete a single ingredient
+      tags:
+        - 'ingredients'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+            example: 10
+          required: true
+          description: ID of the ingredient to delete
+      responses:
+        '204':
+          description: Ingredient was deleted successfully
+        '404':
+          description: ID not found
+  /ingredients/bulk:
+    post:
+      summary: Create multiple new ingredients
+      tags:
+        - 'ingredients'
+      requestBody:
+        description: New ingredients
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Ingredient'
+      responses:
+        '200':
+          description: All ingredients were created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ingredient'
+        '400':
+          description: One or more ingredients were malformed
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Type must not be null
+  /search:
+    get:
+      summary: Search for cocktails and ingredients
+      tags:
+        - 'ingredients'
+        - 'cocktails'
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Part of the name or description of the ingredient or cocktail, in any language
+      responses:
+        '200':
+          description: All search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
 
 components:
   schemas:
@@ -93,4 +246,12 @@ components:
         tag:
           type: string
           example: Delicious spirits
-
+    SearchResult:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Williams Pear
+        description:
+          type: string
+          example: A spirit distilled from the Williams Pear
