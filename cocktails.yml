@@ -27,7 +27,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - $ref: '#/components/parameters/AcceptLanguage'
       responses:
         200:
           description: Successfully received ingredient
@@ -68,11 +67,3 @@ components:
         description:
           type: string
           example: A high proof spirit made from sugar cane
-  parameters:
-    AcceptLanguage:
-      name: Accept-Language
-      in: header
-      schema:
-        type: string
-      description: An optional header to specify a preferred locale of the received entity. A fallback may be sent if the requested locale is not available.
-
