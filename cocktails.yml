@@ -12,188 +12,209 @@ tags:
     description: 'Ingredient Operations'
   - name: 'cocktails'
     description: 'Cocktail Operations'
-  - name: 'locales'
-    description: 'Locale Operations'
 
 paths:
-  /ingredients/{id}:
+  /ingredients:
     get:
-      operationId: getIngredientById
-      summary: Get a single ingredient by its ID
+      operationId: getIngredients
+      summary: Get all ingredients
       tags:
         - ingredients
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         200:
-          description: Successfully received ingredient
+          description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetIngredient'
-        404:
-          description: Ingredient not found
-  /ingredients:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocalizedIngredient'
     post:
-      operationId: createNewIngredient
-      summary: Create a new ingredient
+      operationId: createIngredient
+      summary: Create a new ingredient in the database
       tags:
         - ingredients
       requestBody:
-        required: true
         description: The ingredient to create
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateIngredient'
       responses:
         200:
-          description: The created ingredient
+          description: Retrieve the created ingredient
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetIngredient'
+                $ref: '#/components/schemas/Ingredient'
         400:
-          description: The ingredient was invalid
-  /ingredients/types:
+          description: Invalid ingredient data
+  /ingredients/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 10
     get:
-      operationId: getIngredientTypes
-      summary: Get the available ingredient types
+      operationId: getIngredientById
+      summary: Get a single ingredient by its ID
       tags:
         - ingredients
       responses:
         200:
-          description: A list of ingredient types
+          description: Found ingredient
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        404:
+          description: Ingredient not found
+    post:
+      operationId: updateIngredient
+      summary: Update the ingredient with the specified ID
+      tags:
+        - ingredients
+      requestBody:
+        description: The ingredient data to update with
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIngredient'
+      responses:
+        200:
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        400:
+          description: Invalid ingredient data
+        404:
+          description: Ingredient not found
+  /ingredients/types:
+    get:
+      operationId: getIngredientTypes
+      summary: Get a list of ingredient types on the server
+      tags:
+        - ingredients
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalizedIngredientType'
+  /ingredients/types/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          example: 5
+    get:
+      operationId: getIngredientTypeById
+      summary: Get an ingredient type by its ID
+      tags:
+        - ingredients
+      responses:
+        200:
+          description: Success
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/IngredientType'
-  /locales:
+        404:
+          description: Ingredient Type not found
+  /search:
     get:
-      operationId: getLocales
-      summary: Get the server's list of supported locales
+      operationId: search
+      summary: Search for ingredients and cocktails
       tags:
-        - locales
+        - ingredients
+        - cocktails
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            example: rum
       responses:
         200:
-          description: A list of locales supported by the server
+          description: Success
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Locale'
+                  $ref: '#/components/schemas/SearchResult'
+
 components:
   schemas:
-    CreateIngredient:
+    LocalizedIngredientType:
+      description: An ingredient type in a single language
       type: object
-      required:
-        - typeId
-        - data
-      properties:
-        typeId:
-          type: integer
-          format: int64
-          example: 10
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/IngredientData'
-          minItems: 1
-    IngredientData:
-      type: object
-      required:
-        - description
-        - name
-        - localeId
-      properties:
-        localeId:
-          type: integer
-          format: int64
-          example: 5
-        name:
-          type: string
-          example: Bourbon
-        description:
-          type: string
-          example: An american whiskey
-    GetIngredient:
       required:
         - type
-        - language
-        - country
         - id
-        - name
-        - description
-        - typeId
-      type: object
+        - language
       properties:
         id:
           type: integer
           format: int64
-          example: 10
-          description: The database ID of the locale
+          example: 15
         language:
           type: string
           example: de
-          minLength: 2
-          maxLength: 2
-          description: A 2-letter language designator so that a language-country tuple like de-DE can be formed
-        country:
-          type: string
-          example: DE
-          minLength: 2
-          maxLength: 2
-          description: A 2-letter region designator so that a language-country tuple like de-DE can be formed
         type:
           type: string
-          example: Hard Liquor
+          example: Starker Alkohol
+    LocalizedIngredient:
+      description: An ingredient in a single language
+      type: object
+      required:
+        - type
+        - language
+        - id
+        - description
+        - name
+        - typeId
+        - typeLanguage
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 12
         typeId:
           type: integer
           format: int64
-          example: 5
-        name:
+          example: 10
+        typeLanguage:
           type: string
-          example: White rum
-        description:
+          example: de
+        type:
           type: string
-          example: A high proof spirit made from sugar cane
-    Locale:
-      type: object
-      required:
-        - name
-        - language
-        - country
-        - localizedName
-      properties:
+          example: Alkohol
         language:
           type: string
           example: de
-          minLength: 2
-          maxLength: 2
-          description: A 2-letter language designator so that a language-country tuple like de-DE can be formed
-        country:
-          type: string
-          example: DE
-          minLength: 2
-          maxLength: 2
-          description: A 2-letter region designator so that a language-country tuple like de-DE can be formed
         name:
           type: string
-          example: German (Germany)
-        localizedName:
+          example: Weißer Rum
+        description:
           type: string
-          example: Deutsch (Deutschland)
-        flagEmoji:
-          type: string
+          example: Ein hochprozentiges Destillat aus Zuckerrohr
     IngredientType:
+      description: An ingredient type, with all languages
       type: object
       required:
         - id
@@ -202,31 +223,69 @@ components:
         id:
           type: integer
           format: int64
-          example: 1337
+          example: 15
         names:
-          type: array
-          items:
-            $ref: '#/components/schemas/IngredientTypeName'
-          minItems: 1
-    IngredientTypeName:
+          $ref: '#/components/schemas/TranslatedString'
+    Ingredient:
+      description: An ingredient, with all languages
       type: object
       required:
-        - name
-        - language
-        - country
+        - type
+        - names
+        - id
+        - descriptions
       properties:
-        language:
-          type: string
-          example: de
-          minLength: 2
-          maxLength: 2
-          description: A 2-letter language designator so that a language-country tuple like de-DE can be formed
-        country:
-          type: string
-          example: DE
-          minLength: 2
-          maxLength: 2
-          description: A 2-letter region designator so that a language-country tuple like de-DE can be formed
+        id:
+          type: integer
+          format: int64
+          example: 1337
+        type:
+          $ref: '#/components/schemas/IngredientType'
+        names:
+          $ref: '#/components/schemas/TranslatedString'
+        descriptions:
+          $ref: '#/components/schemas/TranslatedString'
+    CreateIngredient:
+      description: An ingredient for creation on the server
+      type: object
+      required:
+        - descriptions
+        - names
+        - typeId
+      properties:
+        typeId:
+          type: integer
+          format: int64
+          example: 42
+        names:
+          $ref: '#/components/schemas/TranslatedString'
+        descriptions:
+          $ref: '#/components/schemas/TranslatedString'
+    TranslatedString:
+      description: A translated string
+      type: object
+      properties:
+        id:
+          type: integer
+      additionalProperties:
+        type: string
+      example:
+        de: Limettensaft
+        en: Lime juice
+    SearchResult:
+      description: A result of a search for cocktails and ingredients
+      type: object
+      required:
+        - type
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: The ID of the resource that was found
         name:
           type: string
-          example: Hard Liquor
+        type:
+          type: string
+          enum: [INGREDIENT, COCKTAIL]
+
