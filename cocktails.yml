@@ -108,7 +108,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LocalizedIngredientType'
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocalizedIngredientType'
   /ingredients/types/{id}:
     parameters:
       - name: id
