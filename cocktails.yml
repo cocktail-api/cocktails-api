@@ -149,12 +149,6 @@ paths:
             type: string
             example: rum
           description: The term to search for
-        - name: exact
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: Controls search for the full term or the individual words
       responses:
         200:
           description: Success
