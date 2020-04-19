@@ -148,6 +148,13 @@ paths:
           schema:
             type: string
             example: rum
+          description: The term to search for
+        - name: exact
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Controls search for the full term or the individual words
       responses:
         200:
           description: Success
@@ -279,11 +286,14 @@ components:
         - type
         - id
         - name
+        - description
       properties:
         id:
           type: integer
           description: The ID of the resource that was found
         name:
+          type: string
+        description:
           type: string
         type:
           type: string
