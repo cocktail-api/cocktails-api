@@ -96,6 +96,16 @@ paths:
           description: Invalid ingredient data
         404:
           description: Ingredient not found
+    delete:
+      operationId: deleteIngredient
+      summary: Delete the specified ingredient
+      tags:
+        - ingredients
+      responses:
+        204:
+          description: Deleted successfully
+        404:
+          description: Ingredient not found
   /ingredients/types:
     get:
       operationId: getIngredientTypes
