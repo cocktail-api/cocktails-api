@@ -236,7 +236,9 @@ components:
           format: int64
           example: 15
         names:
-          $ref: '#/components/schemas/TranslatedString'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedString'
     Ingredient:
       description: An ingredient, with all languages
       type: object
@@ -253,9 +255,13 @@ components:
         type:
           $ref: '#/components/schemas/IngredientType'
         names:
-          $ref: '#/components/schemas/TranslatedString'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedString'
         descriptions:
-          $ref: '#/components/schemas/TranslatedString'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedString'
     CreateIngredient:
       description: An ingredient for creation on the server
       type: object
@@ -269,20 +275,23 @@ components:
           format: int64
           example: 42
         names:
-          $ref: '#/components/schemas/TranslatedString'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedString'
         descriptions:
-          $ref: '#/components/schemas/TranslatedString'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslatedString'
     TranslatedString:
       description: A translated string
       type: object
       properties:
-        id:
-          type: integer
-      additionalProperties:
-        type: string
-      example:
-        de: Limettensaft
-        en: Lime juice
+        language:
+          type: string
+          example: de
+        translation:
+          type: string
+          example: Limettensaft
     SearchResult:
       description: A result of a search for cocktails and ingredients
       type: object
