@@ -30,6 +30,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/LocalizedIngredient'
     post:
+      security:
+        - oauth2:
+            - openid
       operationId: createIngredient
       summary: Create a new ingredient in the database
       tags:
@@ -74,6 +77,9 @@ paths:
         404:
           description: Ingredient not found
     post:
+      security:
+        - oauth2:
+            - openid
       operationId: updateIngredient
       summary: Update the ingredient with the specified ID
       tags:
@@ -97,6 +103,9 @@ paths:
         404:
           description: Ingredient not found
     delete:
+      security:
+        - oauth2:
+            - openid
       operationId: deleteIngredient
       summary: Delete the specified ingredient
       tags:
