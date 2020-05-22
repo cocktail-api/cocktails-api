@@ -14,7 +14,7 @@ tags:
     description: 'Cocktail Operations'
 
 paths:
-  /ingredients:
+  /api/ingredients:
     get:
       operationId: getIngredients
       summary: Get all ingredients
@@ -50,7 +50,7 @@ paths:
                 $ref: '#/components/schemas/Ingredient'
         400:
           description: Invalid ingredient data
-  /ingredients/{id}:
+  /api/ingredients/{id}:
     parameters:
       - name: id
         in: path
@@ -106,7 +106,7 @@ paths:
           description: Deleted successfully
         404:
           description: Ingredient not found
-  /ingredients/types:
+  /api/ingredients/types:
     get:
       operationId: getIngredientTypes
       summary: Get a list of ingredient types on the server
@@ -121,7 +121,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/LocalizedIngredientType'
-  /ingredients/types/{id}:
+  /api/ingredients/types/{id}:
     parameters:
       - name: id
         in: path
@@ -144,7 +144,7 @@ paths:
                 $ref: '#/components/schemas/IngredientType'
         404:
           description: Ingredient Type not found
-  /search:
+  /api/search:
     get:
       operationId: search
       summary: Search for ingredients and cocktails
@@ -170,6 +170,17 @@ paths:
                   $ref: '#/components/schemas/SearchResult'
 
 components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        implicit:
+          scopes:
+            openid: Default OpenID scope
+            profile: Read profile
+            email: Read email
+          authorizationUrl: https://dev-991339.okta.com/oauth2/default/v1/authorize
+
   schemas:
     LocalizedIngredientType:
       description: An ingredient type in a single language
