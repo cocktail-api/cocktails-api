@@ -4,7 +4,7 @@ info:
   version: 0.0.1
 
 servers:
-  - url: http://localhost:8080/
+  - url: http://localhost:8080/api
     description: Local development server
 
 tags:
@@ -14,7 +14,7 @@ tags:
     description: 'Cocktail Operations'
 
 paths:
-  /api/ingredients:
+  /ingredients:
     get:
       operationId: getIngredients
       summary: Get all ingredients
@@ -50,7 +50,7 @@ paths:
                 $ref: '#/components/schemas/Ingredient'
         400:
           description: Invalid ingredient data
-  /api/ingredients/{id}:
+  /ingredients/{id}:
     parameters:
       - name: id
         in: path
@@ -106,7 +106,7 @@ paths:
           description: Deleted successfully
         404:
           description: Ingredient not found
-  /api/ingredients/types:
+  /ingredients/types:
     get:
       operationId: getIngredientTypes
       summary: Get a list of ingredient types on the server
@@ -121,7 +121,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/LocalizedIngredientType'
-  /api/ingredients/types/{id}:
+  /ingredients/types/{id}:
     parameters:
       - name: id
         in: path
@@ -144,7 +144,7 @@ paths:
                 $ref: '#/components/schemas/IngredientType'
         404:
           description: Ingredient Type not found
-  /api/search:
+  /search:
     get:
       operationId: search
       summary: Search for ingredients and cocktails
