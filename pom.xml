@@ -26,7 +26,7 @@
                             <generateApiDocumentation>false</generateApiDocumentation>
                             <generateModelTests>false</generateModelTests>
                             <generateModelDocumentation>false</generateModelDocumentation>
-                            <modelPackage>de.slevermann.cocktails.models</modelPackage>
+                            <modelPackage>de.slevermann.cocktails.model</modelPackage>
                             <apiPackage>de.slevermann.cocktails.api</apiPackage>
                             <configOptions>
                                 <java8>true</java8>
