@@ -252,23 +252,13 @@ components:
         - id
         - description
         - name
-        - typeId
-        - typeLanguage
       properties:
         id:
           type: string
           format: uuid
           example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
-        typeId:
-          type: string
-          format: uuid
-          example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
-        typeLanguage:
-          type: string
-          example: de
         type:
-          type: string
-          example: Alkohol
+          $ref: '#/components/schemas/LocalizedIngredientType'
         language:
           type: string
           example: de
