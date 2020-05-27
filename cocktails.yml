@@ -18,6 +18,9 @@ tags:
 paths:
   /users/info:
     get:
+      security:
+        - oauth2:
+            - openid
       operationId: getUserInfo
       summary: Get information about the currently logged in user
       tags:
@@ -29,8 +32,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
+  /users/info/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
+    get:
+      operationId: getProfile
+      summary: Get a user's profile information
+      tags:
+        - users
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
   /users/nick:
     post:
+      security:
+        - oauth2:
+            - openid
       operationId: setNick
       summary: Set the current user's nickname
       tags:
@@ -220,8 +247,6 @@ components:
         implicit:
           scopes:
             openid: Default OpenID scope
-            profile: Read profile
-            email: Read email
           authorizationUrl: https://dev-991339.okta.com/oauth2/default/v1/authorize
 
   schemas:
