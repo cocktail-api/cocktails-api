@@ -291,6 +291,7 @@ components:
         - names
         - id
         - descriptions
+        - public
       properties:
         id:
           type: string
@@ -306,6 +307,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranslatedString'
+        owner:
+          $ref: '#/components/schemas/UserInfo'
+        public:
+          type: boolean
     CreateIngredient:
       description: An ingredient for creation on the server
       type: object
