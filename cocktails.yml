@@ -14,6 +14,8 @@ tags:
     description: 'Cocktail Operations'
   - name: 'users'
     description: 'User Operations'
+  - name: 'admin'
+    description: 'Administrative Operations'
 
 paths:
   /users/info:
@@ -34,13 +36,7 @@ paths:
                 $ref: '#/components/schemas/UserInfo'
   /users/info/{id}:
     parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
+      - $ref: '#/components/parameters/uuidParam'
     get:
       operationId: getProfile
       summary: Get a user's profile information
@@ -116,13 +112,7 @@ paths:
           description: Invalid ingredient data
   /ingredients/{id}:
     parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
+      - $ref: '#/components/parameters/uuidParam'
     get:
       operationId: getIngredientById
       summary: Get a single ingredient by its ID
@@ -176,6 +166,89 @@ paths:
           description: Deleted successfully
         404:
           description: Ingredient not found
+  /ingredients/admin/create:
+    post:
+      security:
+        - oauth2:
+            - openid
+      operationId: adminCreateIngredient
+      summary: Create an ingredient that is directly public for use by everyone
+      tags:
+        - ingredients
+        - admin
+      requestBody:
+        description: The ingredient to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIngredient'
+      responses:
+        200:
+          description: Retrieve the created ingredient
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+  /ingredients/admin/publish/{id}:
+    parameters:
+      - $ref: '#/components/parameters/uuidParam'
+    post:
+      security:
+        - oauth2:
+            - openid
+      operationId: setIngredientPublicStatus
+      summary: Make an ingredient public (or revoke its public status)
+      tags:
+        - ingredients
+        - admin
+      requestBody:
+        description: Whether or not to make the ingredient public
+        required: true
+        content:
+          application/json:
+            schema:
+              type: boolean
+      responses:
+        204:
+          description: Status set successfully
+        404:
+          description: Ingredient not found
+  /ingredients/admin/queue/:
+    get:
+      security:
+        - oauth2:
+            - openid
+      operationId: getIngredientQueue
+      summary: Get the moderation queue for ingredients
+      tags:
+        - ingredients
+        - admin
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocalizedIngredient'
+  /ingredients/submit/{id}:
+    parameters:
+      - $ref: '#/components/parameters/uuidParam'
+    get:
+      security:
+        - oauth2:
+            - openid
+      operationId: submitIngredient
+      summary: Submit an ingredient to moderation in order to make it public
+      tags:
+        - ingredients
+      responses:
+        204:
+          description: Success
+        404:
+          description: Ingredient not found
   /ingredients/types:
     get:
       operationId: getIngredientTypes
@@ -193,13 +266,7 @@ paths:
                   $ref: '#/components/schemas/LocalizedIngredientType'
   /ingredients/types/{id}:
     parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
+      - $ref: '#/components/parameters/uuidParam'
     get:
       operationId: getIngredientTypeById
       summary: Get an ingredient type by its ID
@@ -240,6 +307,16 @@ paths:
                   $ref: '#/components/schemas/SearchResult'
 
 components:
+  parameters:
+    uuidParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "d61c2b3a-09e3-4305-8f2b-24079ab52e8d"
+
   securitySchemes:
     oauth2:
       type: oauth2
