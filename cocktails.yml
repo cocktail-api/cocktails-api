@@ -423,7 +423,7 @@ components:
         - names
         - id
         - descriptions
-        - public
+        - published
       properties:
         id:
           type: string
@@ -441,7 +441,7 @@ components:
             $ref: '#/components/schemas/TranslatedString'
         owner:
           $ref: '#/components/schemas/UserInfo'
-        public:
+        published:
           type: boolean
     CreateIngredient:
       description: An ingredient for creation on the server
