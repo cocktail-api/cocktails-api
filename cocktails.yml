@@ -338,6 +338,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/LocalizedIngredient'
   /moderation/ingredients/{id}:
+    parameters:
+      - $ref: '#/components/parameters/uuidParam'
     post:
       security:
         - oauth2:
