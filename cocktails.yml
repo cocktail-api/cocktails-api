@@ -16,6 +16,8 @@ tags:
     description: 'User Operations'
   - name: 'admin'
     description: 'Administrative Operations'
+  - name: 'moderation'
+    description: 'Moderation Operations'
 
 paths:
   /users/info:
@@ -244,25 +246,6 @@ paths:
           description: Status set successfully
         404:
           description: Ingredient not found
-  /ingredients/admin/queue/:
-    get:
-      security:
-        - oauth2:
-            - openid
-      operationId: getIngredientQueue
-      summary: Get the moderation queue for ingredients
-      tags:
-        - ingredients
-        - admin
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/LocalizedIngredient'
   /ingredients/submit/{id}:
     parameters:
       - $ref: '#/components/parameters/uuidParam'
@@ -335,7 +318,49 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SearchResult'
-
+  /moderation/ingredients/queue/:
+    get:
+      security:
+        - oauth2:
+            - openid
+      operationId: getIngredientQueue
+      summary: Get the moderation queue for ingredients
+      tags:
+        - ingredients
+        - moderation
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocalizedIngredient'
+  /moderation/ingredients/{id}:
+    post:
+      security:
+        - oauth2:
+            - openid
+      operationId: moderateIngredient
+      summary: Handle the moderation status of an ingredient
+      tags:
+        - ingredients
+        - moderation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Moderation'
+      responses:
+        204:
+          description: Status set successfully
+        400:
+          description: Invalid moderation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
 components:
   parameters:
     uuidParam:
@@ -522,3 +547,6 @@ components:
         message:
           type: string
           description: A further description of the error
+    Moderation:
+      type: string
+      enum: [ACCEPT, REJECT]
