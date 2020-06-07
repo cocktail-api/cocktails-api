@@ -548,5 +548,10 @@ components:
           type: string
           description: A further description of the error
     Moderation:
-      type: string
-      enum: [ACCEPT, REJECT]
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum: [ACCEPT, REJECT]
