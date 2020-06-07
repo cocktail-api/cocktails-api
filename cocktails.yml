@@ -260,6 +260,8 @@ paths:
       responses:
         204:
           description: Success
+        400:
+          description: Ingredient was already submitted
         404:
           description: Ingredient not found
   /ingredients/types:
