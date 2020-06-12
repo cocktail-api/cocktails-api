@@ -320,7 +320,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SearchResult'
-  /moderation/ingredients/queue/:
+  /moderation/ingredients/queue:
     get:
       security:
         - oauth2:
