@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'org.hidetake.swagger.generator' version '2.18.2'
+}
+
+group = 'de.slevermann.cocktails'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    swaggerCodegen 'org.openapitools:openapi-generator-cli:4.3.1'
+
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.5'
+    implementation 'io.swagger:swagger-annotations:1.6.3'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
+    implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
+}
+
+swaggerSources {
+    cocktails {
+        inputFile = file('cocktails.yml')
+        code {
+            language = 'spring'
+            components = [apis: false, apiTests: false, models: true, supportingFiles: false]
+            configFile = file('spring-config-api.json')
+        }
+    }
+}
+sourceSets {
+    main {
+        java {
+            srcDir "${swaggerSources.cocktails.code.outputDir}/src/main/java"
+        }
+        resources {
+            srcDir "${swaggerSources.cocktails.code.outputDir}/src/main/resources"
+        }
+    }
+}
+
+compileJava {
+    dependsOn swaggerSources.cocktails.code
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = rootProject.name
+            version = version
+
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "Github"
+            url = "https://maven.pkg.github.com/cocktail-api/cocktails-api"
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
+    }
+}

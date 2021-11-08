@@ -1,0 +1,18 @@
+{
+  "modelPackage": "de.slevermann.cocktails.api.model",
+  "dateLibrary": "java8",
+  "hideGenerationTimestamp": true,
+  "java8": true,
+  "reactive": false,
+  "legacyDiscriminatorBehavior": false,
+  "openApiNullable": false,
+  "delegatePattern": false,
+  "useTags": false,
+  "useBeanValidation": true,
+  "performBeanValidation": true,
+  "useOptional": false,
+  "interfaceOnly": true,
+  "skipDefaultInterface": true,
+  "hateoas": false,
+  "useDocumentationAnnotations": false
+}

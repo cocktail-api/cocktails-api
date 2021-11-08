@@ -4,7 +4,237 @@ info:
   version: 0.0.1
 
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost:8080/
     description: Local development server
 
-paths: { }
+tags:
+  - name: types
+    description: Information about ingredient types
+  - name: ingredients
+    description: Information about ingredients
+  - name: cocktails
+    description: Information about cocktails
+paths:
+  /types:
+    get:
+      summary: Get a list of ingredient types
+      description: Fetches a paginated list of ingredient types. Maximum sizes may be limited
+      operationId: listTypes
+      tags:
+        - types
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IngredientType"
+  /types/count:
+    get:
+      summary: Count ingredient types
+      description: The amount of ingredient types currently stored
+      operationId: countTypes
+      tags:
+        - ingredients
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 1337
+  /ingredients:
+    get:
+      summary: Get a list of ingredients
+      description: Fetches a paginated list of ingredients. Maximum sizes may be limited
+      operationId: listIngredients
+      tags:
+        - ingredients
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ingredient"
+  /ingredients/count:
+    get:
+      summary: Count ingredients
+      description: The amount of ingredients currently stored
+      operationId: countIngredients
+      tags:
+        - types
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 1337
+  /cocktails:
+    get:
+      summary: Get a list of cocktails
+      description: Fetches a paginated list of cocktails. Maximum sizes may be limited
+      operationId: listCocktails
+      tags:
+        - cocktails
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CocktailListEntry"
+  /cocktails/{id}:
+    get:
+      summary: Get a single cocktail
+      description: Fetch a complete representation of a given cocktail
+      operationId: getCocktail
+      tags:
+        - cocktails
+      parameters:
+        - $ref: "#/components/parameters/locatorId"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cocktail"
+        404:
+          description: Not found
+  /cocktails/count:
+    get:
+      summary: Count cocktails
+      description: The amount of cocktails currently stored
+      operationId: countCocktails
+      tags:
+        - cocktails
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 1337
+components:
+  schemas:
+    IngredientType:
+      description: Describes a type of ingredient
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e49350c8-942b-4c38-b1b7-98f7d4547483
+        name:
+          type: string
+          example: Fruit juice
+    Ingredient:
+      description: Describes an ingredient
+      required:
+        - id
+        - type
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e49350c8-942b-4c38-b1b7-98f7d4547483
+        type:
+          $ref: "#/components/schemas/IngredientType"
+        name:
+          type: string
+          example: Lime juice
+        description:
+          type: string
+          example: A very tart citrus juice
+    Cocktail:
+      description: Describes a cocktail
+      required:
+        - id
+        - name
+        - ingredients
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e49350c8-942b-4c38-b1b7-98f7d4547483
+        name:
+          type: string
+          example: Daiquiri
+        description:
+          type: string
+          example: A sour cocktail made with rum
+        ingredients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ingredient"
+          minLength: 1
+    CocktailListEntry:
+      description: Describes an entry in a list of cocktails
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e49350c8-942b-4c38-b1b7-98f7d4547483
+        name:
+          type: string
+          example: Daiquiri
+        description:
+          type: string
+          example: A sour cocktail made with rum
+  parameters:
+    page:
+      in: query
+      name: page
+      description: What page to fetch
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        example: 1
+    pageSize:
+      in: query
+      name: pageSize
+      description: Size of the page to fetch
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        example: 1
+    locatorId:
+      in: path
+      name: id
+      description: A uuid for fetching a resource
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: e49350c8-942b-4c38-b1b7-98f7d4547483
