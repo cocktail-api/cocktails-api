@@ -19,6 +19,6 @@ jobs:
       - name: Publish package
         run: gradle publish
         env:
-          MAVEN_USERNAME: ${{ env.GITHUB_ACTOR }}
-          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ github.actor }}
+          MAVEN_PASSWORD: ${{ github.token }}
 

@@ -192,7 +192,7 @@ components:
         ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/Ingredient"
+            $ref: "#/components/schemas/CocktailIngredient"
           minLength: 1
     CocktailListEntry:
       description: Describes an entry in a list of cocktails
@@ -210,6 +210,28 @@ components:
         description:
           type: string
           example: A sour cocktail made with rum
+    CocktailIngredient:
+      description: An ingredient as used in a cocktail
+      allOf:
+       - $ref: "#/components/schemas/Ingredient"
+      properties:
+        amount:
+          type: number
+          format: double
+          exclusiveMinimum: true
+          minimum: 0
+          description: An optional amount of the given ingredient
+        unit:
+          $ref: "#/components/schemas/Unit"
+    Unit:
+      description: A unit for measuring ingredients
+      type: string
+      enum:
+        - GRAMS
+        - OUNCES
+        - MILLILITERS
+        - FLUID_OUNCES
+        - BARSPOONS
   parameters:
     page:
       in: query
