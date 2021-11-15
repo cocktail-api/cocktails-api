@@ -69,6 +69,34 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Ingredient"
+    post:
+      summary: Create ingredient
+      description: Creates a new ingredient in the database
+      operationId: createIngredient
+      tags:
+        - ingredients
+      requestBody:
+        description: Ingredient data to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateIngredient"
+      responses:
+        201:
+          description: Ingredient created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://example.com/ingredients/e49350c8-942b-4c38-b1b7-98f7d4547483
+              description: Location of the created ingredient
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
   /ingredients/count:
     get:
       summary: Count ingredients
@@ -172,6 +200,23 @@ components:
         description:
           type: string
           example: A very tart citrus juice
+    CreateIngredient:
+      description: A new ingredient
+      required:
+        - type
+        - name
+      properties:
+        type:
+          type: string
+          format: uuid
+          example: e49350c8-942b-4c38-b1b7-98f7d4547483
+          description: UUID of the type this ingredient has
+        name:
+          type: string
+          description: Lime juice
+        description:
+          type: string
+          description: A very tart citrus juice
     Cocktail:
       description: Describes a cocktail
       required:
