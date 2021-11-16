@@ -40,7 +40,7 @@ paths:
       description: The amount of ingredient types currently stored
       operationId: countTypes
       tags:
-        - ingredients
+        - types
       responses:
         200:
           description: Success
@@ -97,6 +97,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Ingredient"
+        422:
+          description: Ingredient type does not exist
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /ingredients/count:
     get:
       summary: Count ingredients
