@@ -50,6 +50,49 @@ paths:
                 type: integer
                 format: int64
                 example: 1337
+  /types/{id}:
+    parameters:
+      - $ref: "#/components/parameters/locatorId"
+    get:
+      summary: Get a single type
+      description: A single ingredient type
+      operationId: getType
+      tags:
+        - types
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngredientType"
+        404:
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      summary: Delete a type
+      description: Delete a type of ingredient. Does not work if that type is still used by an ingredient
+      operationId: deleteType
+      tags:
+        - types
+      responses:
+        204:
+          description: Success
+        404:
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        422:
+          description: Type cannot be deleted because it is still in use
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /ingredients:
     get:
       summary: Get a list of ingredients
