@@ -45,8 +45,7 @@ paths:
         content:
           application/json:
             schema:
-              type: string
-              example: "Fruit Juice"
+              $ref: "#/components/schemas/CreateIngredientType"
       responses:
         201:
           description: Type created
@@ -117,8 +116,7 @@ paths:
         content:
           application/json:
             schema:
-              type: string
-              example: "Fruit Juice"
+              $ref: "#/components/schemas/CreateIngredientType"
       responses:
         200:
           description: Success
@@ -338,6 +336,14 @@ components:
           type: string
           format: uuid
           example: e49350c8-942b-4c38-b1b7-98f7d4547483
+        name:
+          type: string
+          example: Fruit juice
+    CreateIngredientType:
+      description: Describes a new type of ingredient for creation or update
+      required:
+        - name
+      properties:
         name:
           type: string
           example: Fruit juice
