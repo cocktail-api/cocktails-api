@@ -34,6 +34,40 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/IngredientType"
+    post:
+      summary: Create a new type
+      description: Create a new ingredient type in the database
+      operationId: createType
+      tags:
+        - types
+      requestBody:
+        description: A new ingredient type to be created
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "Fruit Juice"
+      responses:
+        201:
+          description: Type created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://example.com/types/e49350c8-942b-4c38-b1b7-98f7d4547483
+              description: Location of the created type
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngredientType"
+        409:
+          description: Type with name already exists
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /types/count:
     get:
       summary: Count ingredient types
@@ -68,6 +102,38 @@ paths:
                 $ref: "#/components/schemas/IngredientType"
         404:
           description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      summary: Update a type
+      description: Update a single ingredient type
+      operationId: updateType
+      tags:
+        - types
+      requestBody:
+        description: A new ingredient type to be created
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "Fruit Juice"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngredientType"
+        404:
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        409:
+          description: Type with name already exists
           content:
             application/problem+json:
               schema:
