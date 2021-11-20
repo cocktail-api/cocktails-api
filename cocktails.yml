@@ -271,6 +271,25 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+    put:
+      summary: Update an ingredient
+      description: Update an ingredient
+      operationId: updateIngredient
+      tags:
+        - ingredients
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+        404:
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /cocktails:
     get:
       summary: Get a list of cocktails
