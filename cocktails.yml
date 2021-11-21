@@ -318,6 +318,34 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+  /ingredients/{id}/cocktails:
+    parameters:
+      - $ref: "#/components/parameters/locatorId"
+    get:
+      summary: Get a list of cocktails that use this ingredient
+      description: Fetches a paginated list of cocktails. Maximum sizes may be limited
+      operationId: listCocktailsByIngredient
+      tags:
+        - cocktails
+        - ingredients
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CocktailListEntry"
+        404:
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /cocktails:
     get:
       summary: Get a list of cocktails
@@ -337,6 +365,38 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/CocktailListEntry"
+    post:
+      summary: Create a new cocktail
+      description: Create a new cocktail in the database
+      operationId: createCocktail
+      tags:
+        - cocktails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCocktail"
+      responses:
+        201:
+          description: Cocktail created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: https://example.com/cocktails/e49350c8-942b-4c38-b1b7-98f7d4547483
+              description: Location of the created cocktail
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cocktail"
+        422:
+          description: Ingredient does not exist
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /cocktails/{id}:
     parameters:
       - $ref: "#/components/parameters/locatorId"
@@ -355,6 +415,45 @@ paths:
                 $ref: "#/components/schemas/Cocktail"
         404:
           description: Not found
+    put:
+      summary: Update a cocktail
+      description: Update a cocktail
+      operationId: updateCocktail
+      tags:
+        - cocktails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCocktail"
+      responses:
+        200:
+          description: Cocktail updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cocktail"
+        422:
+          description: Ingredient does not exist
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      summary: Delete a cocktail
+      description: Delete a cocktail
+      operationId: deleteCocktail
+      tags:
+        - cocktails
+      responses:
+        204:
+          description: Success
+        404:
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /cocktails/count:
     get:
       summary: Count cocktails
@@ -436,6 +535,7 @@ components:
         - id
         - name
         - ingredients
+        - instructions
       properties:
         id:
           type: string
@@ -451,6 +551,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CocktailIngredient"
+          minLength: 1
+        instructions:
+          type: array
+          items:
+            $ref: "#/components/schemas/CocktailInstruction"
           minLength: 1
     CocktailListEntry:
       description: Describes an entry in a list of cocktails
@@ -481,6 +586,13 @@ components:
           description: An optional amount of the given ingredient
         unit:
           $ref: "#/components/schemas/Unit"
+    CocktailInstruction:
+      description: A step in the preparation of a cocktail
+      properties:
+        text:
+          type: string
+          description: The preparation instruction
+          example: Add ice to the shaker, seal, and shake vigorously
     Problem:
       type: object
       additionalProperties: true
@@ -527,9 +639,7 @@ components:
       type: string
       enum:
         - GRAMS
-        - OUNCES
         - MILLILITERS
-        - FLUID_OUNCES
         - BARSPOONS
   parameters:
     page:
