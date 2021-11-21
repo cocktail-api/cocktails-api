@@ -586,13 +586,74 @@ components:
           description: An optional amount of the given ingredient
         unit:
           $ref: "#/components/schemas/Unit"
+        optional:
+          type: boolean
+          description: Whether or not this ingredient is optional in the cocktail
+          default: false
+        garnish:
+          type: boolean
+          description: Whether or not this ingredient is a garnish. Garnishes are always optional
+          default: false
+    CreateCocktailIngredient:
+      description: An ingredient for creating a cocktail
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e49350c8-942b-4c38-b1b7-98f7d4547483
+          description: ID of the ingredient
+        amount:
+          type: number
+          format: double
+          exclusiveMinimum: true
+          minimum: 0
+          description: An optional amount of the given ingredient
+        unit:
+          $ref: "#/components/schemas/Unit"
+        optional:
+          type: boolean
+          description: Whether or not this ingredient is optional in the cocktail
+          default: false
+        garnish:
+          type: boolean
+          description: Whether or not this ingredient is a garnish. Garnishes are always optional
+          default: false
     CocktailInstruction:
       description: A step in the preparation of a cocktail
+      required:
+        - text
       properties:
         text:
           type: string
           description: The preparation instruction
           example: Add ice to the shaker, seal, and shake vigorously
+    CreateCocktail:
+      description: A new cocktail
+      required:
+        - name
+        - ingredients
+        - instructions
+      properties:
+        name:
+          type: string
+          example: Daiquiri
+        description:
+          type: string
+          example: A sour cocktail made with rum
+        ingredients:
+          description: The ingredients needed for this cocktail
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateCocktailIngredient"
+          minItems: 1
+        instructions:
+          description: The steps of making the cocktail, in order
+          type: array
+          items:
+            $ref: "#/components/schemas/CocktailInstruction"
+          minItems: 1
     Problem:
       type: object
       additionalProperties: true
