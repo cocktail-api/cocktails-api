@@ -31,9 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/IngredientType"
+                $ref: "#/components/schemas/PagedTypes"
     post:
       summary: Create a new type
       description: Create a new ingredient type in the database
@@ -176,9 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Ingredient"
+                $ref: "#/components/schemas/PagedIngredients"
         404:
           description: Not found
           content:
@@ -201,9 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Ingredient"
+                $ref: "#/components/schemas/PagedIngredients"
     post:
       summary: Create ingredient
       description: Creates a new ingredient in the database
@@ -337,9 +331,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CocktailListEntry"
+                $ref: "#/components/schemas/PagedCocktails"
         404:
           description: Not found
           content:
@@ -362,9 +354,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CocktailListEntry"
+                $ref: "#/components/schemas/PagedCocktails"
     post:
       summary: Create a new cocktail
       description: Create a new cocktail in the database
@@ -702,6 +692,51 @@ components:
         - GRAMS
         - MILLILITERS
         - BARSPOONS
+    PagedResult:
+      required:
+        - total
+        - lastPage
+      properties:
+        total:
+          description: The total amount of entries for this result
+          type: integer
+          format: int64
+          example: 1337
+        lastPage:
+          description: The last possible page for this result
+          type: integer
+          format: int64
+          example: 123
+    PagedCocktails:
+      allOf:
+        - $ref: "#/components/schemas/PagedResult"
+      required:
+        - cocktails
+      properties:
+        cocktails:
+          type: array
+          items:
+            $ref: "#/components/schemas/CocktailListEntry"
+    PagedIngredients:
+      allOf:
+        - $ref: "#/components/schemas/PagedResult"
+      required:
+        - ingredients
+      properties:
+        ingredients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ingredient"
+    PagedTypes:
+      allOf:
+        - $ref: "#/components/schemas/PagedResult"
+      required:
+        - types
+      properties:
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/IngredientType"
   parameters:
     page:
       in: query
@@ -712,6 +747,7 @@ components:
         type: integer
         minimum: 1
         example: 1
+        default: 1
     pageSize:
       in: query
       name: pageSize
@@ -720,7 +756,8 @@ components:
       schema:
         type: integer
         minimum: 1
-        example: 1
+        example: 20
+        default: 20
     locatorId:
       in: path
       name: id
